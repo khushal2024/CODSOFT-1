@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class todo_tile extends StatelessWidget {
-  final String taskname;
-  final bool taskcompleted;
-  Function(bool?)? onChanged;
-  Function(BuildContext) deleteFunction;
-  todo_tile({
-    super.key,
-    required this.taskname,
-    required this.taskcompleted,
-    required this.onChanged,
+class TodoTile extends StatelessWidget {
+  final String taskName;
+  final bool taskCompleted;
+  final Function(bool?)? onChanged;
+  final Function(BuildContext) deleteFunction;
+
+  TodoTile({
+    Key? key,
+    required this.taskName,
+    required this.taskCompleted,
+    this.onChanged,
     required this.deleteFunction,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,9 @@ class todo_tile extends StatelessWidget {
           motion: StretchMotion(),
           children: [
             SlidableAction(
-              onPressed: deleteFunction,
+              onPressed: (BuildContext) {
+                deleteFunction(context);
+              },
               icon: Icons.delete,
               backgroundColor: Colors.red,
               borderRadius: BorderRadius.circular(12),
@@ -35,20 +38,18 @@ class todo_tile extends StatelessWidget {
           // ignore: sort_child_properties_last
           child: Row(
             children: [
-              //check box
               Checkbox(
-                value: taskcompleted,
+                value: taskCompleted,
                 onChanged: onChanged,
                 activeColor: Colors.black,
               ),
-
-              //Tasks added
               Text(
-                taskname,
+                taskName,
                 style: TextStyle(
-                    decoration: taskcompleted
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none),
+                  decoration: taskCompleted
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
               ),
             ],
           ),

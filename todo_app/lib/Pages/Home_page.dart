@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/Utilities/dialogbox.dart';
 import 'package:todo_app/Utilities/todo_tile.dart';
-import 'package:todo_app/Utilities/my_buttons.dart';
 
-class homepage extends StatefulWidget {
-  const homepage({super.key});
+//Modified khushal khan
+class Homepage extends StatefulWidget {
+  const Homepage({Key? key}) : super(key: key);
 
   @override
-  State<homepage> createState() => _homepageState();
+  State<Homepage> createState() => _HomepageState();
 }
 
-class _homepageState extends State<homepage> {
-  //list of todo task
-  List toDolist = [
+class _HomepageState extends State<Homepage> {
+  // List of todo task
+  List<List<dynamic>> toDolist = [
     ["Make exercise ", false],
     ["Do work", false],
   ];
-  // text controller
+
+  // Text controller
   final _controller = TextEditingController();
-  //check box tapperd
+
+  // Checkbox tapped
   void checkBoxChanged(bool? value, int index) {
     setState(() {
       toDolist[index][1] = !toDolist[index][1];
     });
   }
-//save new task
 
+  // Save new task
   void saveNewTask() {
     setState(() {
       toDolist.add([_controller.text, false]);
@@ -34,20 +36,21 @@ class _homepageState extends State<homepage> {
     Navigator.of(context).pop();
   }
 
-// create a new task
+  // Create a new task
   void createNewTask() {
     showDialog(
-        context: context,
-        builder: (context) {
-          return DialogBox(
-            controller: _controller,
-            onSave: saveNewTask,
-            onCancel: () => Navigator.of(context).pop(),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return DialogBox(
+          controller: _controller,
+          onSave: saveNewTask,
+          onCancel: () => Navigator.of(context).pop(),
+        );
+      },
+    );
   }
 
-  //delete tast
+  // Delete task
   void deleteTask(int index) {
     setState(() {
       toDolist.removeAt(index);
@@ -70,11 +73,11 @@ class _homepageState extends State<homepage> {
       body: ListView.builder(
         itemCount: toDolist.length,
         itemBuilder: (context, index) {
-          return todo_tile(
-            taskname: toDolist[index][0],
-            taskcompleted: toDolist[index][1],
+          return TodoTile(
+            taskName: toDolist[index][0],
+            taskCompleted: toDolist[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
-            deleteFunction: (context) => deleteTask,
+            deleteFunction: (context) => deleteTask(index),
           );
         },
       ),
